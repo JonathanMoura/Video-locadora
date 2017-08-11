@@ -60,6 +60,12 @@ public class telaFilmes extends JFrame {
 		contentPane.add(btnCadastrar);
 		
 		JButton btnProcurar = new JButton("Procurar");
+		btnProcurar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			telaFilmes.this.setVisible(false);
+			procurarFilmes.getInstance().setVisible(true);
+			}
+		});
 		btnProcurar.setBounds(37, 76, 104, 23);
 		contentPane.add(btnProcurar);
 		
@@ -67,11 +73,19 @@ public class telaFilmes extends JFrame {
 		btnRemover.setBounds(37, 110, 104, 23);
 		btnRemover.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				telaFilmes.this.setVisible(false);
+				removerFilme.getInstance().setVisible(true);
 			}
 		});
 		contentPane.add(btnRemover);
 		
 		JButton btnAtualizar = new JButton("Atualizar");
+		btnAtualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				telaFilmes.this.setVisible(false);
+				atualizarFilme.getInstance().setVisible(true);
+			}
+		});
 		btnAtualizar.setBounds(37, 144, 104, 23);
 		contentPane.add(btnAtualizar);
 		

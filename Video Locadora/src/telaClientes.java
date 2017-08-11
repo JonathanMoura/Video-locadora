@@ -49,10 +49,22 @@ public class telaClientes extends JFrame {
 		contentPane.setLayout(null);
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
+		btnCadastrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				telaClientes.this.setVisible(false);
+				cadastroClientes.getInstance().setVisible(true);
+			}
+		});
 		btnCadastrar.setBounds(37, 42, 104, 23);
 		contentPane.add(btnCadastrar);
 		
 		JButton btnProcurar = new JButton("Procurar");
+		btnProcurar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				telaClientes.this.setVisible(false);
+				procurarClientes.getInstance().setVisible(true);
+			}
+		});
 		btnProcurar.setBounds(37, 76, 104, 23);
 		contentPane.add(btnProcurar);
 		
@@ -60,11 +72,19 @@ public class telaClientes extends JFrame {
 		btnRemover.setBounds(37, 110, 104, 23);
 		btnRemover.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				telaClientes.this.setVisible(false);
+				removerCliente.getInstance().setVisible(true);
 			}
 		});
 		contentPane.add(btnRemover);
 		
 		JButton btnAtualizar = new JButton("Atualizar");
+		btnAtualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				telaClientes.this.setVisible(false);
+				atualizarCliente.getInstance().setVisible(true);
+			}
+		});
 		btnAtualizar.setBounds(37, 144, 104, 23);
 		contentPane.add(btnAtualizar);
 		
@@ -78,7 +98,7 @@ public class telaClientes extends JFrame {
 		contentPane.add(btnSair);
 		
 		JLabel lblTelaClientes = new JLabel("Clientes");
-		lblTelaClientes.setBounds(77, 11, 46, 14);
+		lblTelaClientes.setBounds(67, 11, 46, 14);
 		contentPane.add(lblTelaClientes);
 	}
 

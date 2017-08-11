@@ -7,6 +7,14 @@ public class RepositorioClientesLista implements IRepositorioClientes {
 	private CelulaCliente primeira;
 	private CelulaCliente ultima;
 	private int tamanho;
+	private static RepositorioClientesLista repositorioInstance;
+	
+	public static RepositorioClientesLista getInstance(){
+		if(repositorioInstance == null)
+			repositorioInstance = new RepositorioClientesLista();
+		
+		return repositorioInstance;
+	}
 	
 	public RepositorioClientesLista(){
 		tamanho = 0;

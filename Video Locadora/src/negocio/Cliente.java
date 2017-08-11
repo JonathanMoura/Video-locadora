@@ -33,6 +33,16 @@ public class Cliente {
 		this.CPF = CPF;
 	}
 	
+	public String getRG()
+	{
+		return this.RG;
+	}
+	
+	public void setRG(String RG)
+	{
+		this.RG = RG;
+	}
+	
 	public String getEndereco()
 	{
 		return this.endereco;

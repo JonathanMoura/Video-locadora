@@ -6,6 +6,14 @@ public class RepositorioClientesArray implements IRepositorioClientes {
 	public static final int TAMANHO = 1000;
 	private Cliente[] repositorio;
 	private int indice;
+	private static RepositorioClientesArray repositorioInstance;
+	
+	public static RepositorioClientesArray getInstance(){
+		if(repositorioInstance == null)
+			repositorioInstance = new RepositorioClientesArray();
+		
+		return repositorioInstance;
+	}
 	
 	public RepositorioClientesArray(){
 		this.repositorio = new Cliente[TAMANHO];

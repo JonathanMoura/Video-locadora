@@ -7,6 +7,14 @@ public class RepositorioFilmesLista implements IRepositorioFilmes {
 	private CelulaFilme primeira;
 	private CelulaFilme ultima;
 	private int tamanho;
+	private static RepositorioFilmesLista repositorioInstance;
+	
+	public static RepositorioFilmesLista getInstance(){
+		if(repositorioInstance == null)
+			repositorioInstance = new RepositorioFilmesLista();
+		
+		return repositorioInstance;
+	}
 	
 	public RepositorioFilmesLista(){
 		tamanho = 0;

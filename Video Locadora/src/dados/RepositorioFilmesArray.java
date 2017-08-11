@@ -6,6 +6,14 @@ public class RepositorioFilmesArray implements IRepositorioFilmes{
 	public static final int TAMANHO = 1000;
 	private Filme[] repositorio;
 	private int indice;
+	private static RepositorioFilmesArray repositorioInstance;
+	
+	public static RepositorioFilmesArray getInstance(){
+		if(repositorioInstance == null)
+			repositorioInstance = new RepositorioFilmesArray();
+		
+		return repositorioInstance;
+	}
 	
 	public RepositorioFilmesArray(){
 		repositorio = new Filme[TAMANHO];
