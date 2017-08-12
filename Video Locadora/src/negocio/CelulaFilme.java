@@ -5,6 +5,10 @@ public class CelulaFilme {
 	private CelulaFilme prox;
 	private Filme filme;
 	
+	public CelulaFilme(){
+		
+	}
+	
 	public CelulaFilme(CelulaFilme prox, Filme filme){
 		this.prox = prox;
 		this.filme = filme;

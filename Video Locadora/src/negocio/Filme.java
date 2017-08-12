@@ -13,6 +13,8 @@ public class Filme {
 	public Filme(String nome, String genero, int quantidade, double valor){
 		this.nome = nome;
 		this.genero = genero;
+		this.quantidade = quantidade;
+		this.valor = valor;
 	}
 	
 	public String getNome()

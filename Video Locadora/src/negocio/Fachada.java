@@ -1,6 +1,7 @@
 package negocio;
 import dados.*;
 import interfaces.*;
+import excecoes.*;
 
 public class Fachada {
 
@@ -9,7 +10,7 @@ public class Fachada {
 	private static Fachada instance;
 	
 	public Fachada(){
-		IRepositorioClientes repositorioClientes = new RepositorioClientesArray();
+		RepositorioClientesArray repositorioClientes = new RepositorioClientesArray();
 		IRepositorioFilmes repositorioFilmes = new RepositorioFilmesLista();
 		clientes = new CadastroCliente(repositorioClientes);
 		filmes = new CadastroFilme(repositorioFilmes);
@@ -21,23 +22,23 @@ public class Fachada {
 		return instance;
 	}
 	
-	public void cadastrarCliente(Cliente cliente){
-		clientes.cadastrar(cliente);
+	public void cadastrarCliente(Cliente cliente) throws FilmeExistenteException {
+		clientes.getInstance().cadastrar(cliente);
 	}
 	
 	public Cliente procurarCliente(String CPF){
-		return clientes.procurar(CPF);
+		return clientes.getInstance().procurar(CPF);
 	}
 	
 	public void removerCliente(String CPF){
-		clientes.remover(CPF);
+		clientes.getInstance().remover(CPF);
 	}
 	
 	public void atualizarCliente(Cliente cliente){
-		clientes.atualizar(cliente);
+		clientes.getInstance().atualizar(cliente);
 	}
 	
-	public void cadastrarFilme(Filme filme){
+	public void cadastrarFilme(Filme filme) throws FilmeExistenteException  {
 		filmes.cadastrar(filme);
 	}
 	

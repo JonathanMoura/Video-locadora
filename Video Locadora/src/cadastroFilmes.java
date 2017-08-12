@@ -6,6 +6,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import dados.RepositorioFilmesArray;
+import excecoes.FilmeExistenteException;
+import negocio.Fachada;
 import negocio.Filme;
 
 import javax.swing.JTextField;
@@ -23,7 +25,7 @@ public class cadastroFilmes extends JFrame {
 	private JTextField textFieldValor;
 	private JTextField textFieldGenero;
 	private JTextField textFieldNome;
-	private RepositorioFilmesArray repositorio = new RepositorioFilmesArray();
+	private Fachada fachada = new Fachada();
 	
 	public static JFrame getInstance(){
 		if(cadastroFilmesInstance == null)
@@ -53,78 +55,85 @@ public class cadastroFilmes extends JFrame {
 	 */
 	public cadastroFilmes() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 353, 156);
+		setBounds(100, 100, 365, 257);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		textFieldQuantidade = new JTextField();
-		textFieldQuantidade.setBounds(88, 60, 56, 20);
+		textFieldQuantidade.setBounds(114, 60, 56, 20);
 		contentPane.add(textFieldQuantidade);
 		textFieldQuantidade.setColumns(10);
 		
 		textFieldValor = new JTextField();
-		textFieldValor.setBounds(88, 85, 56, 20);
+		textFieldValor.setBounds(114, 85, 56, 20);
 		contentPane.add(textFieldValor);
 		textFieldValor.setColumns(10);
 		
 		textFieldGenero = new JTextField();
-		textFieldGenero.setBounds(88, 36, 118, 20);
+		textFieldGenero.setBounds(114, 36, 114, 20);
 		contentPane.add(textFieldGenero);
 		textFieldGenero.setColumns(10);
 		
 		textFieldNome = new JTextField();
 		textFieldNome.setColumns(10);
-		textFieldNome.setBounds(88, 14, 118, 20);
+		textFieldNome.setBounds(114, 14, 198, 20);
 		contentPane.add(textFieldNome);
 		
 		JLabel lblNome = new JLabel("Nome:");
-		lblNome.setBounds(10, 14, 46, 14);
+		lblNome.setBounds(36, 14, 46, 14);
 		contentPane.add(lblNome);
 		
 		JLabel lblGenero = new JLabel("Genero:");
-		lblGenero.setBounds(10, 39, 46, 14);
+		lblGenero.setBounds(36, 39, 46, 14);
 		contentPane.add(lblGenero);
 		
 		JLabel lblQuantidade = new JLabel("Quantidade:");
-		lblQuantidade.setBounds(10, 63, 75, 14);
+		lblQuantidade.setBounds(36, 63, 75, 14);
 		contentPane.add(lblQuantidade);
 		
 		JLabel lblValor = new JLabel("Valor (R$):");
-		lblValor.setBounds(10, 88, 68, 14);
+		lblValor.setBounds(36, 88, 68, 14);
 		contentPane.add(lblValor);
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
+		btnCadastrar.setBounds(36, 148, 109, 60);
+		contentPane.add(btnCadastrar);
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Filme filme = new Filme();
-				filme.setNome(textFieldNome.getText());
-				filme.setGenero(textFieldGenero.getText());
-				filme.setQuantidade(Integer.parseInt(textFieldQuantidade.getText()));
-				filme.setValor(Double.parseDouble(textFieldValor.getText()));
-				repositorio.getInstance().inserir(filme);
-				JOptionPane.showMessageDialog(null, "Cadastro efetuado com sucesso");
-				textFieldNome.setText("");
-				textFieldGenero.setText("");
-				textFieldQuantidade.setText("");
-				textFieldValor.setText("");
-				cadastroFilmes.this.setVisible(false);
-				telaFilmes.getInstance().setVisible(true);
+				try{
+					filme.setNome(textFieldNome.getText());
+					filme.setGenero(textFieldGenero.getText());
+					filme.setQuantidade(Integer.parseInt(textFieldQuantidade.getText()));
+					filme.setValor(Double.parseDouble(textFieldValor.getText()));
+					fachada.getInstance().cadastrarFilme(filme);
+					JOptionPane.showMessageDialog(null, "Cadastro efetuado com sucesso");
+					textFieldNome.setText("");
+					textFieldGenero.setText("");
+					textFieldQuantidade.setText("");
+					textFieldValor.setText("");
+					telaFilmes.getInstance().setVisible(true);
+					dispose();
+				}
+				catch(NumberFormatException ex){
+					JOptionPane.showMessageDialog(null, "Preencha os campos vazios");
+				}
+				catch(FilmeExistenteException fe){
+					JOptionPane.showMessageDialog(null, fe.getMessage());
+				}
 			}
 		});
-
-		btnCadastrar.setBounds(215, 13, 109, 60);
-		contentPane.add(btnCadastrar);
 		
 		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.setBounds(203, 148, 109, 60);
+		contentPane.add(btnCancelar);
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cadastroFilmes.this.setVisible(false);
 				telaFilmes.getInstance().setVisible(true);
+				dispose();
 			}
 		});
-		btnCancelar.setBounds(215, 84, 109, 23);
-		contentPane.add(btnCancelar);
 	}
 }

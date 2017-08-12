@@ -1,4 +1,5 @@
 package negocio;
+import excecoes.*;
 import interfaces.IRepositorioFilmes;
 
 public class CadastroFilme {
@@ -8,16 +9,8 @@ public class CadastroFilme {
 		cadastro = repositorio;
 	}
 	
-	public void cadastrar(Filme filme){
-		if(filme != null){
-			if(!cadastro.existe(filme.getNome())){
-				cadastro.inserir(filme);
-			}
-			else
-				System.out.println("Filme ja cadastrado");
-		}
-		else
-			System.out.println("Filme já cadastrado");
+	public void cadastrar(Filme filme) throws FilmeExistenteException {
+			cadastro.inserir(filme);
 	}
 	
 	public boolean existe(String nome){

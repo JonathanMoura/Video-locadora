@@ -1,16 +1,29 @@
 package negocio;
 import interfaces.IRepositorioClientes;
+import dados.RepositorioClientesArray;
 
 public class CadastroCliente {
-	private IRepositorioClientes cadastro;
+	private RepositorioClientesArray cadastro;
+	private static CadastroCliente instance;
 	
-	public CadastroCliente(IRepositorioClientes repositorio){
+	public static CadastroCliente getInstance(){
+		if(instance == null)
+			instance = new CadastroCliente();
+		
+		return instance;
+	}
+	
+	public CadastroCliente(){
+		
+	}
+	
+	public CadastroCliente(RepositorioClientesArray repositorio){
 		cadastro = repositorio;
 	}
 
 	public void cadastrar(Cliente cliente){
 		if(cliente != null){
-			if(!cadastro.existe(cliente.getCPF())){
+			if(!cadastro.getInstance().existe(cliente.getCPF())){
 				cadastro.inserir(cliente);
 			}
 			else
@@ -21,18 +34,18 @@ public class CadastroCliente {
 	}
 	
 	public boolean existe(String CPF){
-		return cadastro.existe(CPF);
+		return cadastro.getInstance().existe(CPF);
 	}
 	
 	public Cliente procurar(String CPF){
-		return cadastro.procurar(CPF);
+		return cadastro.getInstance().procurar(CPF);
 	}
 	
 	public void remover(String CPF){
-		cadastro.remover(CPF);
+		cadastro.getInstance().remover(CPF);
 	}
 	
 	public void atualizar(Cliente cliente){
-		cadastro.atualizar(cliente);
+		cadastro.getInstance().atualizar(cliente);
 	}
 }
