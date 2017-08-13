@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import java.awt.Font;
 import java.awt.SystemColor;
+import excecoes.*;
 
 public class telaFilmes extends JFrame {
 
@@ -95,33 +96,12 @@ public class telaFilmes extends JFrame {
 		contentPane.add(btnCadastrar);
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cadastroFilmes.getInstance().setVisible(true);
-				dispose();
+				JOptionPane.showMessageDialog(null, "Antes de inserir um filme, verifique se ele já foi cadastrado");
+					cadastroFilmes.getInstance().setVisible(true);
+					dispose();
 			}
 		});
 		
-		JButton btnRemover = new JButton("Remover");
-		btnRemover.setBounds(229, 143, 104, 23);
-		contentPane.add(btnRemover);
-		btnRemover.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				fachada.getInstance().removerFilme(textFieldNome.getText());
-				int resposta = JOptionPane.showConfirmDialog(null, "Confirmar remoção?");
-				if(resposta == 0)
-					JOptionPane.showMessageDialog(null, "Filme removido com sucesso");
-			}
-		});
-		
-		JButton btnAtualizar = new JButton("Atualizar");
-		btnAtualizar.setBounds(229, 109, 104, 23);
-		contentPane.add(btnAtualizar);
-		btnAtualizar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				atualizarFilme.getInstance().setVisible(true);
-				dispose();
-			}
-		});
-								
 		JButton btnProcurar = new JButton("Procurar");
 		btnProcurar.setBounds(229, 71, 104, 23);
 		contentPane.add(btnProcurar);
@@ -137,12 +117,48 @@ public class telaFilmes extends JFrame {
 				catch(NullPointerException npe){
 					JOptionPane.showMessageDialog(null, "Insira o nome do filme");
 				}
-				/*catch(FilmeNaoEncontrado fnee){
-					JOptionPane.showMessageDialog(null, fnee.getMessage);
-				}*/
+				catch(FilmeNaoEncontradoException fnee){
+					JOptionPane.showMessageDialog(null, fnee.getMessage());
+				}
+				catch(CampoVazioException cve){
+					JOptionPane.showMessageDialog(null, cve.getMessage());
+				}
+			}
+		});
+
+		JButton btnAtualizar = new JButton("Atualizar");
+		btnAtualizar.setBounds(229, 109, 104, 23);
+		contentPane.add(btnAtualizar);
+		btnAtualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				atualizarFilme.getInstance().setVisible(true);
+				dispose();
 			}
 		});
 		
+		JButton btnRemover = new JButton("Remover");
+		btnRemover.setBounds(229, 143, 104, 23);
+		contentPane.add(btnRemover);
+		btnRemover.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					fachada.getInstance().removerFilme(textFieldNome.getText());			
+					int resposta = JOptionPane.showConfirmDialog(null, "Confirmar remoção?");
+					if(resposta == 0)
+						JOptionPane.showMessageDialog(null, "Filme removido com sucesso");
+				}
+				catch(NullPointerException npe){
+					JOptionPane.showMessageDialog(null, "Preencha os campos vazios");
+				}
+				catch(FilmeNaoEncontradoException fnee){
+					JOptionPane.showMessageDialog(null, fnee.getMessage());
+				}
+				catch(CampoVazioException cve){
+					JOptionPane.showMessageDialog(null, cve.getMessage());
+				}
+			}
+		});
+												
 		JButton btnSair = new JButton("Sair");
 		btnSair.setBounds(229, 177, 104, 23);
 		contentPane.add(btnSair);

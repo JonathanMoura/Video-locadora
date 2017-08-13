@@ -7,6 +7,7 @@ import javax.swing.border.EmptyBorder;
 
 import negocio.Cliente;
 import negocio.Fachada;
+import excecoes.*;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -117,20 +118,28 @@ public class atualizarCliente extends JFrame {
 		btnAtualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Cliente cliente = new Cliente();
-				cliente.setNome(textFieldNome.getText());
-				cliente.setCPF(textFieldCPF.getText());
-				cliente.setRG(textFieldRG.getText());
-				cliente.setEndereco(textFieldEndereco.getText());
-				cliente.setTelefone(textFieldTelefone.getText());
-				fachada.getInstance().atualizarCliente(cliente);
-				JOptionPane.showMessageDialog(null, "Cliente atualizado com sucesso");
-				textFieldNome.setText("");
-				textFieldCPF.setText("");
-				textFieldRG.setText("");
-				textFieldEndereco.setText("");
-				textFieldTelefone.setText("");
-				telaClientes.getInstance().setVisible(true);
-				dispose();
+				try{
+					cliente.setNome(textFieldNome.getText());
+					cliente.setCPF(textFieldCPF.getText());
+					cliente.setRG(textFieldRG.getText());
+					cliente.setEndereco(textFieldEndereco.getText());
+					cliente.setTelefone(textFieldTelefone.getText());
+					fachada.getInstance().atualizarCliente(cliente);
+					JOptionPane.showMessageDialog(null, "Cliente atualizado com sucesso");
+					textFieldNome.setText("");
+					textFieldCPF.setText("");
+					textFieldRG.setText("");
+					textFieldEndereco.setText("");
+					textFieldTelefone.setText("");
+					telaClientes.getInstance().setVisible(true);
+					dispose();
+				}
+				catch(NullPointerException npe){
+					JOptionPane.showMessageDialog(null, "Preencha os campos vazios");
+				}
+				catch(ClienteNaoEncontradoException cnee){
+					JOptionPane.showMessageDialog(null, cnee.getMessage());
+				}
 			}
 		});
 				

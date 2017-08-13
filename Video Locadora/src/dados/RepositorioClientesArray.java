@@ -1,18 +1,19 @@
 package dados;
 import negocio.Cliente;
 import interfaces.IRepositorioClientes;
+import excecoes.*;
 
 public class RepositorioClientesArray implements IRepositorioClientes {
 	public static final int TAMANHO = 1000;
 	private Cliente[] repositorio;
 	private int indice;
-	private static RepositorioClientesArray repositorioInstance;
+	private static RepositorioClientesArray instance;
 	
 	public static RepositorioClientesArray getInstance(){
-		if(repositorioInstance == null)
-			repositorioInstance = new RepositorioClientesArray();
+		if(instance == null)
+			instance = new RepositorioClientesArray();
 		
-		return repositorioInstance;
+		return instance;
 	}
 	
 	public RepositorioClientesArray(){
@@ -20,11 +21,12 @@ public class RepositorioClientesArray implements IRepositorioClientes {
 		indice = 0;
 	}
 	
-	public int getIndice(String CPF){
+	public int getIndice(String CPF) {
 		int i = 0;
+		if(repositorio[0] == null)
+			return -1;
 		while(CPF != repositorio[i].getCPF()){
 			if(i > indice){
-				System.out.println("Indice não encontrado");
 				return indice;
 			}
 			i++;
@@ -37,8 +39,11 @@ public class RepositorioClientesArray implements IRepositorioClientes {
 		indice++;
 	}
 	
-	public boolean existe(String CPF){
+	public boolean existe(String CPF) {
 		int i = getIndice(CPF);
+		
+		if(i == -1)
+			return false;
 		
 		if(repositorio[i] == null)
 			return false;
@@ -46,32 +51,31 @@ public class RepositorioClientesArray implements IRepositorioClientes {
 			return true;
 	}
 	
-	public Cliente procurar(String CPF){
+	public Cliente procurar(String CPF) {
 		if(existe(CPF))
 			return repositorio[getIndice(CPF)];
-		else{
-			System.out.println("Cliente não encontrado");
-			return null;
-		}
+		return null;
 	}
 	
-	public void remover(String CPF){
+	public boolean remover(String CPF) {
 		if(existe(CPF)){
 			int i = getIndice(CPF);
 			repositorio[i] = null;
 			repositorio[i] = repositorio[indice - 1];
 			repositorio[indice - 1] = null;
 			indice--;
+			return true;
 		}
 		else
-			System.out.println("Cliente não cadastrado");			
+			return false;			
 	}
 	
-	public void atualizar(Cliente cliente){
+	public boolean atualizar(Cliente cliente) {
 		String CPF = cliente.getCPF();
-		if(existe(CPF))
+		if(existe(CPF)){
 			repositorio[getIndice(CPF)] = cliente;
-		else
-			System.out.println("Cliente não cadastrado");
+			return true;
+		}else
+			return false;
 	}
 }

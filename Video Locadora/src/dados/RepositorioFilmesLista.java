@@ -21,29 +21,27 @@ public class RepositorioFilmesLista implements IRepositorioFilmes {
 		tamanho = 0;
 	}
 	
-	public void inserir(Filme filme) throws FilmeExistenteException, FilmeNaoEncontradoException {
-		if(existe(filme.getNome())){
-			FilmeExistenteException e = new FilmeExistenteException();
-			throw e;
-		}
-		else{
+	public void inserir(Filme filme) {
 			CelulaFilme nova = new CelulaFilme(this.primeira,filme);
 			this.primeira = nova;
 		
 			if(tamanho == 0)
 				this.ultima = this.primeira;
 				tamanho++;
-		}
 	}
 	
-	public boolean existe(String nome) throws FilmeNaoEncontradoException{ 
+	public boolean existe(String nome) throws CampoVazioException, FilmeNaoEncontradoException{ 
 		if(procurar(nome) != null)
 			return true;
 		else
 			return false;
 	}
 	
-	public Filme procurar(String nome) throws FilmeNaoEncontradoException{
+	public Filme procurar(String nome) throws CampoVazioException, FilmeNaoEncontradoException{
+		if(nome == ""){
+			CampoVazioException e = new CampoVazioException();
+			throw e;
+		}
 		if(primeira.getFilme() == null){
 			FilmeNaoEncontradoException e = new FilmeNaoEncontradoException();
 			throw e;
@@ -59,7 +57,7 @@ public class RepositorioFilmesLista implements IRepositorioFilmes {
 		return atual.getFilme();
 	}
 	
-	public void remover(String nome) throws FilmeNaoEncontradoException {
+	public void remover(String nome) throws CampoVazioException, FilmeNaoEncontradoException {
 		if(existe(nome)){
 			CelulaFilme atual = primeira;
 			CelulaFilme anterior = null;
@@ -79,7 +77,7 @@ public class RepositorioFilmesLista implements IRepositorioFilmes {
 		}
 	}
 	
-	public void atualizar(Filme filme) throws FilmeNaoEncontradoException{
+	public void atualizar(Filme filme) throws CampoVazioException, FilmeNaoEncontradoException{
 		String nome = filme.getNome();
 		if(existe(nome)){
 			CelulaFilme atual = primeira;

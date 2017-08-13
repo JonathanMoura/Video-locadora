@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import excecoes.*;
 import negocio.Cliente;
 import negocio.Fachada;
 
@@ -96,15 +97,13 @@ public class telaClientes extends JFrame {
 		textDadosCliente.setBounds(10, 42, 196, 100);
 		panel_1.add(textDadosCliente);
 		
-		JButton btnRemover = new JButton("Remover");
-		btnRemover.setBounds(229, 143, 104, 23);
-		panel.add(btnRemover);
-		btnRemover.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				fachada.getInstance().removerCliente(textFieldCPF.getText());
-				int resposta = JOptionPane.showConfirmDialog(null,"Confirmar remoção do cliente?");
-				if(resposta == 0)	
-					JOptionPane.showMessageDialog(null, "Cliente removido");
+		JButton btnCadastrar = new JButton("Cadastrar novo cliente");
+		btnCadastrar.setBounds(22, 36, 194, 23);
+		panel.add(btnCadastrar);
+		btnCadastrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				cadastroClientes.getInstance().setVisible(true);
+				dispose();
 			}
 		});
 				
@@ -114,9 +113,36 @@ public class telaClientes extends JFrame {
 		btnProcurar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Cliente achouCliente = new Cliente();
-				achouCliente = fachada.getInstance().procurarCliente(textFieldCPF.getText());
-				
-				textDadosCliente.append(achouCliente.toString());
+				try{
+					achouCliente = fachada.getInstance().procurarCliente(textFieldCPF.getText());
+					textDadosCliente.append(achouCliente.toString());
+				}
+				catch(NullPointerException npe){
+					JOptionPane.showMessageDialog(null, "Preencha  o campo vazio");
+				}
+				catch(ClienteNaoEncontradoException cnee){
+					JOptionPane.showMessageDialog(null, cnee.getMessage());
+				}
+			}
+		});
+		
+		JButton btnRemover = new JButton("Remover");
+		btnRemover.setBounds(229, 143, 104, 23);
+		panel.add(btnRemover);
+		btnRemover.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					fachada.getInstance().removerCliente(textFieldCPF.getText());
+					int resposta = JOptionPane.showConfirmDialog(null,"Confirmar remoção do cliente?");
+					if(resposta == 0)	
+						JOptionPane.showMessageDialog(null, "Cliente removido");
+				}
+				catch(NullPointerException npe){
+					JOptionPane.showMessageDialog(null, "Preencha os campos vazios");
+				}
+				catch(ClienteNaoEncontradoException cnee){
+					JOptionPane.showMessageDialog(null, cnee.getMessage());
+				}
 			}
 		});
 		
@@ -139,15 +165,5 @@ public class telaClientes extends JFrame {
 				dispose();
 			}
 		});		
-				
-		JButton btnCadastrar = new JButton("Cadastrar novo cliente");
-		btnCadastrar.setBounds(22, 36, 194, 23);
-		panel.add(btnCadastrar);
-		btnCadastrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				telaClientes.this.setVisible(false);
-				cadastroClientes.getInstance().setVisible(true);
-			}
-		});
 	}
 }

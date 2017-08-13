@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import dados.RepositorioFilmesArray;
-import excecoes.FilmeExistenteException;
+import excecoes.*;
 import negocio.Fachada;
 import negocio.Filme;
 
@@ -62,17 +62,17 @@ public class cadastroFilmes extends JFrame {
 		contentPane.setLayout(null);
 		
 		textFieldQuantidade = new JTextField();
-		textFieldQuantidade.setBounds(114, 60, 56, 20);
+		textFieldQuantidade.setBounds(114, 92, 56, 20);
 		contentPane.add(textFieldQuantidade);
 		textFieldQuantidade.setColumns(10);
 		
 		textFieldValor = new JTextField();
-		textFieldValor.setBounds(114, 85, 56, 20);
+		textFieldValor.setBounds(114, 117, 56, 20);
 		contentPane.add(textFieldValor);
 		textFieldValor.setColumns(10);
 		
 		textFieldGenero = new JTextField();
-		textFieldGenero.setBounds(114, 36, 114, 20);
+		textFieldGenero.setBounds(114, 68, 114, 20);
 		contentPane.add(textFieldGenero);
 		textFieldGenero.setColumns(10);
 		
@@ -86,15 +86,15 @@ public class cadastroFilmes extends JFrame {
 		contentPane.add(lblNome);
 		
 		JLabel lblGenero = new JLabel("Genero:");
-		lblGenero.setBounds(36, 39, 46, 14);
+		lblGenero.setBounds(36, 71, 46, 14);
 		contentPane.add(lblGenero);
 		
 		JLabel lblQuantidade = new JLabel("Quantidade:");
-		lblQuantidade.setBounds(36, 63, 75, 14);
+		lblQuantidade.setBounds(36, 95, 75, 14);
 		contentPane.add(lblQuantidade);
 		
 		JLabel lblValor = new JLabel("Valor (R$):");
-		lblValor.setBounds(36, 88, 68, 14);
+		lblValor.setBounds(36, 120, 68, 14);
 		contentPane.add(lblValor);
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
@@ -117,11 +117,8 @@ public class cadastroFilmes extends JFrame {
 					telaFilmes.getInstance().setVisible(true);
 					dispose();
 				}
-				catch(NumberFormatException ex){
+				catch(NumberFormatException nfe){
 					JOptionPane.showMessageDialog(null, "Preencha os campos vazios");
-				}
-				catch(FilmeExistenteException fe){
-					JOptionPane.showMessageDialog(null, fe.getMessage());
 				}
 			}
 		});
@@ -135,5 +132,26 @@ public class cadastroFilmes extends JFrame {
 				dispose();
 			}
 		});
+		
+		JButton btnCadastrado = new JButton("Cadastrado?");
+		btnCadastrado.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					fachada.getInstance().procurarFilme(textFieldNome.getText());
+					JOptionPane.showMessageDialog(null, "Filme já cadastrado");
+				}
+				catch(NullPointerException npe){
+					JOptionPane.showMessageDialog(null, "Insira o nome do filme");
+				}
+				catch(FilmeNaoEncontradoException fnee){
+					JOptionPane.showMessageDialog(null, fnee.getMessage());
+				}
+				catch(CampoVazioException cve){
+					JOptionPane.showMessageDialog(null, cve.getMessage());
+				}
+			}
+		});
+		btnCadastrado.setBounds(114, 40, 114, 23);
+		contentPane.add(btnCadastrado);
 	}
 }

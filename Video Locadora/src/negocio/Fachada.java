@@ -11,7 +11,7 @@ public class Fachada {
 	
 	public Fachada(){
 		RepositorioClientesArray repositorioClientes = new RepositorioClientesArray();
-		IRepositorioFilmes repositorioFilmes = new RepositorioFilmesLista();
+		RepositorioFilmesLista repositorioFilmes = new RepositorioFilmesLista();
 		clientes = new CadastroCliente(repositorioClientes);
 		filmes = new CadastroFilme(repositorioFilmes);
 	}
@@ -22,35 +22,35 @@ public class Fachada {
 		return instance;
 	}
 	
-	public void cadastrarCliente(Cliente cliente) throws FilmeExistenteException {
+	public void cadastrarCliente(Cliente cliente) throws ClienteExistenteException{
 		clientes.getInstance().cadastrar(cliente);
 	}
 	
-	public Cliente procurarCliente(String CPF){
+	public Cliente procurarCliente(String CPF) throws ClienteNaoEncontradoException{
 		return clientes.getInstance().procurar(CPF);
 	}
 	
-	public void removerCliente(String CPF){
+	public void removerCliente(String CPF) throws ClienteNaoEncontradoException{
 		clientes.getInstance().remover(CPF);
 	}
 	
-	public void atualizarCliente(Cliente cliente){
+	public void atualizarCliente(Cliente cliente) throws ClienteNaoEncontradoException{
 		clientes.getInstance().atualizar(cliente);
 	}
 	
-	public void cadastrarFilme(Filme filme) throws FilmeExistenteException  {
-		filmes.cadastrar(filme);
+	public void cadastrarFilme(Filme filme) {
+		filmes.getInstance().cadastrar(filme);
 	}
 	
-	public Filme procurarFilme(String nome){
-		return filmes.procurar(nome);
+	public Filme procurarFilme(String nome) throws CampoVazioException, FilmeNaoEncontradoException{
+		return filmes.getInstance().procurar(nome);
 	}
 	
-	public void removerFilme(String nome){
-		filmes.remover(nome);
+	public void removerFilme(String nome) throws CampoVazioException, FilmeNaoEncontradoException{
+		filmes.getInstance().remover(nome);
 	}
 	
-	public void atualizarFilme(Filme filme){
-		filmes.atualizar(filme);
+	public void atualizarFilme(Filme filme) throws CampoVazioException, FilmeNaoEncontradoException{
+		filmes.getInstance().atualizar(filme);
 	}
 }

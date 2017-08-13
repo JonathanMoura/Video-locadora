@@ -72,6 +72,12 @@ public class telaPrincipal extends JFrame {
 		contentPane.add(btnClientes);
 		
 		JButton btnLocacao = new JButton("Loca\u00E7\u00E3o");
+		btnLocacao.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				locacao.getInstance().setVisible(true);
+				dispose();
+			}
+		});
 		btnLocacao.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnLocacao.setBounds(131, 116, 89, 51);
 		contentPane.add(btnLocacao);

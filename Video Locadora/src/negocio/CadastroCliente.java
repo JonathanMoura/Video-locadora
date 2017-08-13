@@ -1,6 +1,7 @@
 package negocio;
 import interfaces.IRepositorioClientes;
 import dados.RepositorioClientesArray;
+import excecoes.*;
 
 public class CadastroCliente {
 	private RepositorioClientesArray cadastro;
@@ -21,31 +22,42 @@ public class CadastroCliente {
 		cadastro = repositorio;
 	}
 
-	public void cadastrar(Cliente cliente){
-		if(cliente != null){
-			if(!cadastro.getInstance().existe(cliente.getCPF())){
-				cadastro.inserir(cliente);
-			}
-			else
-				System.out.println("Cliente já cadastrado!");
+	public void cadastrar(Cliente cliente) throws ClienteExistenteException{
+		if(cadastro.getInstance().existe(cliente.getCPF())){
+			ClienteExistenteException e = new ClienteExistenteException();
+			throw e;
 		}
 		else
-			System.out.println("Cliente inválido");
+			cadastro.inserir(cliente);
 	}
 	
-	public boolean existe(String CPF){
+	public boolean existe(String CPF) {
 		return cadastro.getInstance().existe(CPF);
 	}
 	
-	public Cliente procurar(String CPF){
-		return cadastro.getInstance().procurar(CPF);
+	public Cliente procurar(String CPF) throws ClienteNaoEncontradoException{
+		Cliente cliente = new Cliente();
+		
+		cliente = cadastro.getInstance().procurar(CPF); 
+		
+		if(cliente == null){
+			ClienteNaoEncontradoException e = new ClienteNaoEncontradoException();
+			throw e;
+		}
+		return cliente;
 	}
 	
-	public void remover(String CPF){
-		cadastro.getInstance().remover(CPF);
+	public void remover(String CPF) throws ClienteNaoEncontradoException{
+		if(!cadastro.getInstance().remover(CPF)){
+			ClienteNaoEncontradoException e = new ClienteNaoEncontradoException();
+			throw e;
+		}
 	}
 	
-	public void atualizar(Cliente cliente){
-		cadastro.getInstance().atualizar(cliente);
+	public void atualizar(Cliente cliente) throws ClienteNaoEncontradoException{
+		if(!cadastro.getInstance().atualizar(cliente)){
+			ClienteNaoEncontradoException e = new ClienteNaoEncontradoException();
+			throw e;
+		}
 	}
 }

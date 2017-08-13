@@ -15,6 +15,7 @@ import dados.RepositorioClientesArray;
 import dados.RepositorioClientesLista;
 import negocio.Cliente;
 import negocio.Fachada;
+import excecoes.*;
 
 public class cadastroClientes extends JFrame {
 
@@ -112,20 +113,28 @@ public class cadastroClientes extends JFrame {
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Cliente cliente = new Cliente();
-				cliente.setNome(textFieldNome.getText());
-				cliente.setCPF(textFieldCPF.getText());
-				cliente.setRG(textFieldRG.getText());
-				cliente.setEndereco(textFieldEndereco.getText());
-				cliente.setTelefone(textFieldTelefone.getText());
-				fachada.getInstance().cadastrarCliente(cliente);
-				JOptionPane.showMessageDialog(null, "Cadastro efetuado com sucesso");
-				textFieldNome.setText("");
-				textFieldCPF.setText("");
-				textFieldRG.setText("");
-				textFieldEndereco.setText("");
-				textFieldTelefone.setText("");
-				telaClientes.getInstance().setVisible(true);
-				dispose();
+				try{
+					cliente.setNome(textFieldNome.getText());
+					cliente.setCPF(textFieldCPF.getText());
+					cliente.setRG(textFieldRG.getText());
+					cliente.setEndereco(textFieldEndereco.getText());
+					cliente.setTelefone(textFieldTelefone.getText());
+					fachada.getInstance().cadastrarCliente(cliente);
+					JOptionPane.showMessageDialog(null, "Cadastro efetuado com sucesso");
+					textFieldNome.setText("");
+					textFieldCPF.setText("");
+					textFieldRG.setText("");
+					textFieldEndereco.setText("");
+					textFieldTelefone.setText("");
+					telaClientes.getInstance().setVisible(true);
+					dispose();
+				}
+				catch(NullPointerException npe){
+					JOptionPane.showMessageDialog(null, "Preenchar os campos vazios");
+				}
+				catch(ClienteExistenteException cee){
+					JOptionPane.showMessageDialog(null, cee.getMessage());
+				}
 			}
 		});
 		

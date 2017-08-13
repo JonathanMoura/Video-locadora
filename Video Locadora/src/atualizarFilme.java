@@ -7,6 +7,7 @@ import javax.swing.border.EmptyBorder;
 
 import negocio.Fachada;
 import negocio.Filme;
+import excecoes.*;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -106,19 +107,33 @@ public class atualizarFilme extends JFrame {
 		contentPane.add(btnAtualizar);
 		btnAtualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Filme filme = new Filme();
-				filme.setNome(textFieldNome.getText());
-				filme.setGenero(textFieldGenero.getText());
-				filme.setQuantidade(Integer.parseInt(textFieldQuantidade.getText()));
-				filme.setValor(Double.parseDouble(textFieldValor.getText()));
-				fachada.getInstance().atualizarFilme(filme);
-				JOptionPane.showMessageDialog(null, "Filme atualizado com sucesso");
-				textFieldNome.setText("");
-				textFieldGenero.setText("");
-				textFieldQuantidade.setText("");
-				textFieldValor.setText("");
-				telaFilmes.getInstance().setVisible(true);
-				dispose();
+				try{
+					Filme filme = new Filme();
+					filme.setNome(textFieldNome.getText());
+					filme.setGenero(textFieldGenero.getText());
+					filme.setQuantidade(Integer.parseInt(textFieldQuantidade.getText()));
+					filme.setValor(Double.parseDouble(textFieldValor.getText()));
+					fachada.getInstance().atualizarFilme(filme);
+					JOptionPane.showMessageDialog(null, "Filme atualizado com sucesso");
+					textFieldNome.setText("");
+					textFieldGenero.setText("");
+					textFieldQuantidade.setText("");
+					textFieldValor.setText("");
+					telaFilmes.getInstance().setVisible(true);
+					dispose();
+				}
+				catch(NumberFormatException nfe){
+					JOptionPane.showMessageDialog(null, "Preencha os campos vazios");
+				}
+				catch(NullPointerException npe){
+					JOptionPane.showMessageDialog(null, "Preencha os campos vazios");
+				}
+				catch(FilmeNaoEncontradoException fnee){
+					JOptionPane.showMessageDialog(null, fnee.getMessage());
+				}
+				catch(CampoVazioException cve){
+					JOptionPane.showMessageDialog(null, cve.getMessage());
+				}
 			}
 		});
 		
