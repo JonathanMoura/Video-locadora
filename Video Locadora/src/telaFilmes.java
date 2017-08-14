@@ -264,7 +264,11 @@ public class telaFilmes extends JFrame {
 					if(resposta == 0){
 						fachada.getInstance().removerFilme(textFieldNome.getText());
 						JOptionPane.showMessageDialog(null, "Filme removido com sucesso");
-						textFieldProcurar.setText("Insira o Nome");
+						textFieldNome.setText("");
+						textFieldGenero.setText("");
+						textFieldQuantia.setText("");
+						textFieldValor.setText("");
+						textFieldProcurar.setText("Insira o nome");
 					}
 				}
 				catch(FilmeNaoEncontradoException cnee){
@@ -283,6 +287,11 @@ public class telaFilmes extends JFrame {
 		contentPane.add(btnSair);	
 		btnSair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				textFieldNome.setText("");
+				textFieldGenero.setText("");
+				textFieldQuantia.setText("");
+				textFieldValor.setText("");
+				textFieldProcurar.setText("Insira o nome");
                 telaPrincipal.getInstance().setVisible(true);
                 dispose();
 			}

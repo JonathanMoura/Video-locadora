@@ -264,7 +264,12 @@ public class telaClientes extends JFrame {
 					resposta = JOptionPane.showConfirmDialog(null,"Confirmar remoção de " + textFieldNome.getText());
 					if(resposta == 0){
 						fachada.getInstance().removerCliente(textFieldCPF.getText());
-						JOptionPane.showMessageDialog(null, "Cliente removido");
+						JOptionPane.showMessageDialog(null, "Cliente removido com sucesso");
+						textFieldNome.setText("");
+						textFieldCPF.setText("");
+						textFieldRG.setText("");
+						textFieldEndereco.setText("");
+						textFieldTelefone.setText("");
 						textFieldProcurar.setText("Insira o CPF");
 					}
 				}
@@ -283,7 +288,13 @@ public class telaClientes extends JFrame {
 		btnSair.setBounds(501, 224, 120, 31);
 		contentPane.add(btnSair);		
 		btnSair.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {				
+			public void actionPerformed(ActionEvent e) {	
+				textFieldNome.setText("");
+				textFieldCPF.setText("");
+				textFieldRG.setText("");
+				textFieldEndereco.setText("");
+				textFieldTelefone.setText("");
+				textFieldProcurar.setText("Insira o CPF");
 				telaPrincipal.getInstance().setVisible(true);
 				dispose();
 			}

@@ -17,6 +17,8 @@ import negocio.Fachada;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
@@ -36,6 +38,7 @@ public class telaLocacao extends JFrame {
 	private JTextField textFieldNomeFilme;
 	private JTextField textFieldValor;
 	private Fachada fachada;
+	private JTextField textFieldValorTotal;
 	
 	public static JFrame getInstance(){
 		if(instance == null)
@@ -104,14 +107,24 @@ public class telaLocacao extends JFrame {
 		textFieldEntrega.setBounds(108, 234, 179, 25);
 		contentPane.add(textFieldEntrega);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(108, 25, 179, 29);
-		contentPane.add(comboBox);
+		textFieldValorTotal = new JTextField();
+		textFieldValorTotal.setText("0.0");
+		textFieldValorTotal.setForeground(Color.BLACK);
+		textFieldValorTotal.setFont(new Font("Arial", Font.PLAIN, 18));
+		textFieldValorTotal.setColumns(10);
+		textFieldValorTotal.setBounds(482, 76, 98, 29);
+		contentPane.add(textFieldValorTotal);
 		
-		JLabel lblValor = new JLabel("Valor total:");
+		JLabel lblValorTotalA = new JLabel("Valor total:");
+		lblValorTotalA.setForeground(SystemColor.windowBorder);
+		lblValorTotalA.setFont(new Font("Arial", Font.PLAIN, 18));
+		lblValorTotalA.setBounds(330, 91, 120, 14);
+		contentPane.add(lblValorTotalA);
+		
+		JLabel lblValor = new JLabel("Valor:");
 		lblValor.setForeground(SystemColor.windowBorder);
 		lblValor.setFont(new Font("Arial", Font.PLAIN, 18));
-		lblValor.setBounds(363, 40, 120, 14);
+		lblValor.setBounds(330, 43, 120, 14);
 		contentPane.add(lblValor);
 		
 		JLabel lblCliente = new JLabel("Cliente:");
@@ -131,7 +144,52 @@ public class telaLocacao extends JFrame {
 		lblDataDeEntrega.setFont(new Font("Arial", Font.PLAIN, 18));
 		lblDataDeEntrega.setBounds(10, 238, 98, 19);
 		contentPane.add(lblDataDeEntrega);
-		
+				
+		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.setForeground(SystemColor.windowBorder);
+		comboBox.setFont(new Font("Arial", Font.PLAIN, 18));
+		comboBox.setBounds(108, 25, 179, 29);
+		contentPane.add(comboBox);
+		comboBox.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				String nomeFilme;
+				String[] filmeAlugado;
+				String [] dataEntrega;
+				Filme filme = new Filme();
+				Cliente achouCliente = new Cliente();
+				try{
+					nomeFilme = comboBox.getSelectedItem()+"";
+					filme = fachada.getInstance().procurarFilme(nomeFilme);
+					textFieldValor.setText("R$"+Double.toString(filme.getValor()));
+					achouCliente = fachada.getInstance().procurarCliente(textFieldProcurar.getText());
+					filmeAlugado = achouCliente.getFilmeAlugado();
+					if(filmeAlugado[0] == null){
+						SemAluguelException sae = new SemAluguelException();
+						throw sae;
+					}
+					dataEntrega = achouCliente.getDataEntrega();
+					for(int i = 0; i < filmeAlugado.length; i++){
+						if(filmeAlugado[i].equals(nomeFilme)){
+							textFieldEntrega.setText(dataEntrega[i]);
+							break;
+						}
+					}
+				}
+				catch(ClienteNaoEncontradoException cnee){
+					JOptionPane.showMessageDialog(null, cnee.getMessage());
+				}
+				catch(SemAluguelException sae){
+					JOptionPane.showMessageDialog(null, sae.getMessage());
+				}
+				catch(FilmeNaoEncontradoException fnee){
+					JOptionPane.showMessageDialog(null, fnee.getMessage());
+				}
+				catch(CampoVazioException cve){
+					JOptionPane.showMessageDialog(null, cve.getMessage());
+				}
+			}
+		});
+			
 		JButton btnProcurar = new JButton("Procurar");
 		btnProcurar.setForeground(SystemColor.windowBorder);
 		btnProcurar.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -140,10 +198,45 @@ public class telaLocacao extends JFrame {
 		btnProcurar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				Cliente achouCliente = new Cliente();
+				Filme filme = new Filme();
+				String[] nomeFilme;
+				String[] dataEntrega;
+				String filmeAlugado;
+				double valorTotal = 0;
+				comboBox.removeAllItems();
 				try{
 					achouCliente = fachada.getInstance().procurarCliente(textFieldProcurar.getText());
-					textFieldNomeFilme.setText(achouCliente.getFilmeAlugado());
-					textFieldEntrega.setText(achouCliente.getDataEntrega());
+					nomeFilme = achouCliente.getFilmeAlugado();
+					
+					if(nomeFilme[0] == null){
+						SemAluguelException sae = new SemAluguelException();
+						throw sae;
+					}
+					dataEntrega = achouCliente.getDataEntrega();
+					for(int i = 0; i < nomeFilme.length; i++){
+						if(nomeFilme[i] == null)
+							break;
+						comboBox.addItem(nomeFilme[i]);
+						filme = fachada.getInstance().procurarFilme(nomeFilme[i]);
+						valorTotal += filme.getValor();
+					}
+					filmeAlugado = comboBox.getSelectedItem()+"";
+					textFieldNomeFilme.setText(filmeAlugado);
+					for(int i = 0; i < nomeFilme.length; i++){
+						if(nomeFilme[i].equals(filmeAlugado)){
+							textFieldEntrega.setText(dataEntrega[i]);
+							break;
+						}
+					}
+					filme = fachada.getInstance().procurarFilme(filmeAlugado);
+					textFieldValor.setText("R$"+Double.toString(filme.getValor()));
+					textFieldValorTotal.setText("R$"+Double.toString(valorTotal));
+				}
+				catch(SemAluguelException sae){
+					JOptionPane.showMessageDialog(null, sae.getMessage());
+				}
+				catch(FilmeNaoEncontradoException fnee){
+					JOptionPane.showMessageDialog(null, fnee.getMessage());
 				}
 				catch(ClienteNaoEncontradoException cnee){
 					JOptionPane.showMessageDialog(null, cnee.getMessage());
@@ -164,11 +257,11 @@ public class telaLocacao extends JFrame {
 				Filme filme = new Filme();
 				Cliente cliente = new Cliente();
 				int resposta;
-				String nome, CPF, data;
+				String nomeFilme, CPF, data;
 				try{
 					resposta = JOptionPane.showConfirmDialog(null, "Confirmar aluguel?");
 					if(resposta == 0){
-						nome = textFieldNomeFilme.getText();
+						nomeFilme = textFieldNomeFilme.getText();
 						CPF = textFieldProcurar.getText();
 						data = textFieldEntrega.getText();
 						
@@ -176,11 +269,10 @@ public class telaLocacao extends JFrame {
 							CampoVazioException cve = new CampoVazioException();
 							throw cve;
 						}
-						filme = fachada.getInstance().procurarFilme(nome);
-						textFieldValor.setText(Double.toString(filme.getValor()));
+						filme = fachada.getInstance().procurarFilme(nomeFilme);
 						cliente = fachada.getInstance().procurarCliente(CPF);
-						cliente.setFilmeAlugado(nome);
-						cliente.setDataEntrega(textFieldEntrega.getText());
+						cliente.alugarFilme(nomeFilme, data);
+						fachada.getInstance().atualizarCliente(cliente);
 						JOptionPane.showMessageDialog(null, "Aluguel efetuado com sucesso");
 						textFieldNomeFilme.setText("");
 						textFieldEntrega.setText("");
@@ -207,16 +299,19 @@ public class telaLocacao extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Cliente cliente = new Cliente();
 				int resposta;
-				String CPF;
+				String CPF, filmeAlugado;
+				String[] nomeFilme;
+				double valorTotal = 0;
+				Filme filme = new Filme();
 				try{
-					if(textFieldNomeFilme.getText().equals("")){
+					CPF = textFieldProcurar.getText();
+					filmeAlugado = textFieldNomeFilme.getText();
+					if(filmeAlugado.equals("")){
 						CampoVazioException cve = new CampoVazioException();
 						throw cve;
 					}
-					CPF = textFieldProcurar.getText();
 					cliente = fachada.getInstance().procurarCliente(CPF);
-					cliente.setFilmeAlugado("");
-					cliente.setDataEntrega("");
+					cliente.removerFilmeAlugado(filmeAlugado);
 					resposta = JOptionPane.showConfirmDialog(null,"Confirmar remoção de " + textFieldNomeFilme.getText());
 					if(resposta == 0){
 						fachada.getInstance().atualizarCliente(cliente);
@@ -224,7 +319,18 @@ public class telaLocacao extends JFrame {
 						textFieldNomeFilme.setText("");
 						textFieldEntrega.setText("");
 						textFieldValor.setText("");
+						nomeFilme = cliente.getFilmeAlugado();
+						comboBox.removeAllItems();
+						for(int i = 0; i < nomeFilme.length; i++){
+							comboBox.addItem(nomeFilme[i]);
+							filme = fachada.getInstance().procurarFilme(nomeFilme[i]);
+							valorTotal += filme.getValor();
+						}
+						textFieldValorTotal.setText(Double.toString(valorTotal));
 					}
+				}
+				catch(FilmeNaoEncontradoException fnee){
+					JOptionPane.showMessageDialog(null, fnee.getMessage());
 				}
 				catch(ClienteNaoEncontradoException cnee){
 					JOptionPane.showMessageDialog(null, cnee.getMessage());
@@ -239,12 +345,18 @@ public class telaLocacao extends JFrame {
 		btnSair.setForeground(SystemColor.windowBorder);
 		btnSair.setFont(new Font("Arial", Font.PLAIN, 18));
 		btnSair.setBounds(482, 232, 120, 31);
-		contentPane.add(btnSair);		
+		contentPane.add(btnSair);
 		btnSair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				textFieldProcurar.setText("");
+				textFieldValor.setText("");
+				textFieldNomeFilme.setText("");
+				textFieldEntrega.setText("");
+				textFieldValorTotal.setText("");
+				comboBox.removeAllItems();
                 telaPrincipal.getInstance().setVisible(true);
                 dispose();
 			}
-		});
+		});		
 	}
 }
