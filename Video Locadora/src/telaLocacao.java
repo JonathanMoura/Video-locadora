@@ -159,6 +159,7 @@ public class telaLocacao extends JFrame {
 				Cliente achouCliente = new Cliente();
 				try{
 					nomeFilme = comboBox.getSelectedItem()+"";
+					textFieldNomeFilme.setText(nomeFilme);
 					filme = fachada.getInstance().procurarFilme(nomeFilme);
 					textFieldValor.setText("R$"+Double.toString(filme.getValor()));
 					achouCliente = fachada.getInstance().procurarCliente(textFieldProcurar.getText());
@@ -223,9 +224,11 @@ public class telaLocacao extends JFrame {
 					filmeAlugado = comboBox.getSelectedItem()+"";
 					textFieldNomeFilme.setText(filmeAlugado);
 					for(int i = 0; i < nomeFilme.length; i++){
-						if(nomeFilme[i].equals(filmeAlugado)){
-							textFieldEntrega.setText(dataEntrega[i]);
+						if(nomeFilme[i] == null)
 							break;
+						else if(nomeFilme[i].equals(filmeAlugado)){
+								textFieldEntrega.setText(dataEntrega[i]);
+								break;
 						}
 					}
 					filme = fachada.getInstance().procurarFilme(filmeAlugado);
@@ -316,12 +319,15 @@ public class telaLocacao extends JFrame {
 					if(resposta == 0){
 						fachada.getInstance().atualizarCliente(cliente);
 						JOptionPane.showMessageDialog(null, "Filme removido com sucesso");
+						
 						textFieldNomeFilme.setText("");
 						textFieldEntrega.setText("");
 						textFieldValor.setText("");
 						nomeFilme = cliente.getFilmeAlugado();
 						comboBox.removeAllItems();
 						for(int i = 0; i < nomeFilme.length; i++){
+							if(nomeFilme[i] == null)
+								break;
 							comboBox.addItem(nomeFilme[i]);
 							filme = fachada.getInstance().procurarFilme(nomeFilme[i]);
 							valorTotal += filme.getValor();

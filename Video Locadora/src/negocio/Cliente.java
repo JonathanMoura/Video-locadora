@@ -103,12 +103,16 @@ public class Cliente {
 	
 	public void removerFilmeAlugado(String nomeFilme){
 		for(int i = 0; i < this.filmeAlugado.length; i++){
-			if(nomeFilme.equals(filmeAlugado[i])){
-				filmeAlugado[i] = null;
-				dataEntrega[i] = null;
-				filmeAlugado[i] = filmeAlugado[indice - 1];
-				dataEntrega[i] = dataEntrega[indice - 1];
-				indice--;
+			if(filmeAlugado[i]==null)
+				break;
+			else if(nomeFilme.equals(filmeAlugado[i])){
+					filmeAlugado[i] = null;
+					dataEntrega[i] = null;
+					filmeAlugado[i] = filmeAlugado[indice - 1];
+					filmeAlugado[indice - 1] = null;
+					dataEntrega[i] = dataEntrega[indice - 1];
+					dataEntrega[indice - 1] = null ;
+					indice--;
 			}
 		}
 	}
