@@ -76,13 +76,16 @@ public class telaPrincipal extends JFrame {
 		JLabel iconeLocacao = new JLabel("New label");
 		iconeLocacao.setBounds(297, 113, 60, 60);
 		contentPane.add(iconeLocacao);
+		ImageIcon alugueis = new ImageIcon(telaPrincipal.class.getResource("/icones/alugueis.png"));
+		Image imag2 = alugueis.getImage().getScaledInstance(iconeLocacao.getWidth(), iconeLocacao.getHeight(), Image.SCALE_DEFAULT);
+		iconeLocacao.setIcon(new ImageIcon(imag2));
 		
 		JLabel iconeCliente = new JLabel("Icone");
 		iconeCliente.setBounds(500, 113, 60, 60);
 		contentPane.add(iconeCliente);
 		ImageIcon clientes = new ImageIcon(telaPrincipal.class.getResource("/icones/clientes.png"));
-		Image imag2 = clientes.getImage().getScaledInstance(iconeCliente.getWidth(), iconeCliente.getHeight(), Image.SCALE_DEFAULT);
-		iconeCliente.setIcon(new ImageIcon(imag2));		
+		Image imag3 = clientes.getImage().getScaledInstance(iconeCliente.getWidth(), iconeCliente.getHeight(), Image.SCALE_DEFAULT);
+		iconeCliente.setIcon(new ImageIcon(imag3));		
 		
 		JButton btnFilmes = new JButton("Filmes");
 		btnFilmes.setForeground(SystemColor.windowBorder);

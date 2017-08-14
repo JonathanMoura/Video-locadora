@@ -115,6 +115,13 @@ public class telaLocacao extends JFrame {
 		textFieldValorTotal.setBounds(482, 76, 98, 29);
 		contentPane.add(textFieldValorTotal);
 		
+		JLabel iconeLocacao = new JLabel("New label");
+		iconeLocacao.setBounds(10, 11, 60, 60);
+		contentPane.add(iconeLocacao);
+		ImageIcon alugueis = new ImageIcon(telaPrincipal.class.getResource("/icones/alugueis.png"));
+		Image imag2 = alugueis.getImage().getScaledInstance(iconeLocacao.getWidth(), iconeLocacao.getHeight(), Image.SCALE_DEFAULT);
+		iconeLocacao.setIcon(new ImageIcon(imag2));
+		
 		JLabel lblValorTotalA = new JLabel("Valor total:");
 		lblValorTotalA.setForeground(SystemColor.windowBorder);
 		lblValorTotalA.setFont(new Font("Arial", Font.PLAIN, 18));
