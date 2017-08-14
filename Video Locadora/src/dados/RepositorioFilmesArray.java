@@ -6,13 +6,13 @@ public class RepositorioFilmesArray implements IRepositorioFilmes{
 	public static final int TAMANHO = 1000;
 	private Filme[] repositorio;
 	private int indice;
-	private static RepositorioFilmesArray repositorioInstance;
+	private static RepositorioFilmesArray instance;
 	
 	public static RepositorioFilmesArray getInstance(){
-		if(repositorioInstance == null)
-			repositorioInstance = new RepositorioFilmesArray();
+		if(instance == null)
+			instance = new RepositorioFilmesArray();
 		
-		return repositorioInstance;
+		return instance;
 	}
 	
 	public RepositorioFilmesArray(){
@@ -22,16 +22,19 @@ public class RepositorioFilmesArray implements IRepositorioFilmes{
 	
 	public int getIndice(String nome){
 		int i = 0;
-		while(nome != repositorio[i].getNome()){
-			if(i > indice){
-				System.out.println("Indice não encontrado");
+		if(indice == 0)
+			return -1;
+		while(!nome.equals(repositorio[i].getNome())){
+			if(i >= indice){
 				return indice;
 			}
 			i++;
+			if(repositorio[i] == null)
+				return -1;
 		}
 		return i;
 	}
-	
+		
 	public void inserir(Filme filme){
 		this.repositorio[indice] = filme;
 		indice++;
@@ -39,7 +42,11 @@ public class RepositorioFilmesArray implements IRepositorioFilmes{
 	
 	public boolean existe(String nome){
 		int i = getIndice(nome);
-		if(repositorio[i] == null)
+		
+		if(i == -1)
+			return false;
+		
+		if(repositorio[i].getNome().equals(""))
 			return false;
 		else
 			return true;
@@ -48,28 +55,28 @@ public class RepositorioFilmesArray implements IRepositorioFilmes{
 	public Filme procurar(String nome){
 		if(existe(nome))
 			return repositorio[getIndice(nome)];
-		else{
-			System.out.println("Filme não encontrado");
-			return null;
-		}
+		return null;
 	}
 	
-	public void remover(String nome){
+	public boolean remover(String nome){
 		if(existe(nome)){
 			int i = getIndice(nome);
 			repositorio[i] = null;
 			repositorio[i] = repositorio[indice - 1];
 			repositorio[indice - 1] = null;
 			indice--;
+			return true;
 		}
+		else
+			return false;
 	}
 	
-	public void atualizar(Filme filme){
+	public boolean atualizar(Filme filme){
 		String nome = filme.getNome();
-		
-		if(existe(nome))
+		if(existe(nome)){
 			repositorio[getIndice(nome)] = filme;
-		else
-			System.out.println("Filme não cadastrado");
+			return true;
+		}else
+			return false;
 	}
 }

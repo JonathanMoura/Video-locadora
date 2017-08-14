@@ -3,17 +3,17 @@ package negocio;
 public class Filme {
 	private String nome;
 	private String genero;
-	private int quantidade;
+	private int quantia;
 	private double valor;
 	
 	public Filme(){
 		
 	}
 	
-	public Filme(String nome, String genero, int quantidade, double valor){
+	public Filme(String nome, String genero, int quantia, double valor){
 		this.nome = nome;
 		this.genero = genero;
-		this.quantidade = quantidade;
+		this.quantia = quantia;
 		this.valor = valor;
 	}
 	
@@ -37,14 +37,14 @@ public class Filme {
 		this.genero = genero;
 	}
 	
-	public int getQuantidade()
+	public int getQuantia()
 	{
-		return this.quantidade;
+		return this.quantia;
 	}
 	
-	public void setQuantidade(int quantidade)
+	public void setQuantia(int quantia)
 	{
-		this.quantidade = quantidade;
+		this.quantia = quantia;
 	}
 	
 	public double getValor()

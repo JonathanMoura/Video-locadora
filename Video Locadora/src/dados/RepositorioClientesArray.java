@@ -22,14 +22,16 @@ public class RepositorioClientesArray implements IRepositorioClientes {
 	}
 	
 	public int getIndice(String CPF) {
-		int i = 0;
-		if(repositorio[0] == null)
+		int i = 0;	
+		if(indice == 0)
 			return -1;
-		while(CPF != repositorio[i].getCPF()){
-			if(i > indice){
+		while(!CPF.equals(repositorio[i].getCPF())){
+			if(i >= indice){
 				return indice;
 			}
 			i++;
+			if(repositorio[i] == null)
+				return -1;
 		}
 		return i;
 	}
@@ -45,7 +47,7 @@ public class RepositorioClientesArray implements IRepositorioClientes {
 		if(i == -1)
 			return false;
 		
-		if(repositorio[i] == null)
+		if(repositorio[i].getNome().equals(""))
 			return false;
 		else
 			return true;

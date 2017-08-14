@@ -11,7 +11,7 @@ public class Fachada {
 	
 	public Fachada(){
 		RepositorioClientesArray repositorioClientes = new RepositorioClientesArray();
-		RepositorioFilmesLista repositorioFilmes = new RepositorioFilmesLista();
+		RepositorioFilmesArray repositorioFilmes = new RepositorioFilmesArray();
 		clientes = new CadastroCliente(repositorioClientes);
 		filmes = new CadastroFilme(repositorioFilmes);
 	}
@@ -22,23 +22,23 @@ public class Fachada {
 		return instance;
 	}
 	
-	public void cadastrarCliente(Cliente cliente) throws ClienteExistenteException{
+	public void cadastrarCliente(Cliente cliente) throws CampoVazioException, ClienteExistenteException{
 		clientes.getInstance().cadastrar(cliente);
 	}
 	
-	public Cliente procurarCliente(String CPF) throws ClienteNaoEncontradoException{
+	public Cliente procurarCliente(String CPF) throws CampoVazioException, ClienteNaoEncontradoException{
 		return clientes.getInstance().procurar(CPF);
 	}
 	
-	public void removerCliente(String CPF) throws ClienteNaoEncontradoException{
+	public void removerCliente(String CPF) throws CPFVazioException, ClienteNaoEncontradoException{
 		clientes.getInstance().remover(CPF);
 	}
 	
-	public void atualizarCliente(Cliente cliente) throws ClienteNaoEncontradoException{
+	public void atualizarCliente(Cliente cliente) throws CampoVazioException, ClienteNaoEncontradoException{
 		clientes.getInstance().atualizar(cliente);
 	}
 	
-	public void cadastrarFilme(Filme filme) {
+	public void cadastrarFilme(Filme filme) throws CampoVazioException, FilmeExistenteException{
 		filmes.getInstance().cadastrar(filme);
 	}
 	
@@ -46,7 +46,7 @@ public class Fachada {
 		return filmes.getInstance().procurar(nome);
 	}
 	
-	public void removerFilme(String nome) throws CampoVazioException, FilmeNaoEncontradoException{
+	public void removerFilme(String nome) throws NomeVazioException, FilmeNaoEncontradoException{
 		filmes.getInstance().remover(nome);
 	}
 	

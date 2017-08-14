@@ -7,6 +7,8 @@ public class Cliente {
 	private String RG;
 	private String endereco;
 	private String telefone;
+	private String filmeAlugado;
+	private String dataEntrega;
 	
 	public Cliente()
 	{
@@ -69,5 +71,25 @@ public class Cliente {
 	public void setTelefone(String telefone)
 	{
 		this.telefone = telefone;
+	}
+	
+	public String getFilmeAlugado()
+	{
+		return this.filmeAlugado;
+	}
+	
+	public void setFilmeAlugado(String filmeAlugado)
+	{
+		this.filmeAlugado = filmeAlugado;
+	}
+	
+	public String getDataEntrega()
+	{
+		return this.dataEntrega;
+	}
+	
+	public void setDataEntrega(String dataEntrega)
+	{
+		this.dataEntrega = dataEntrega;
 	}
 }
